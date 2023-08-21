@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
-import { CreateTweet } from './DTOS/user';
-import { CreateUser } from './DTOS/tweet';
+import { CreateTweet } from './DTOS/tweet';
+import { CreateUser } from './DTOS/user';
 
 @Controller()
 export class AppController {
@@ -31,7 +31,7 @@ export class AppController {
 
   @Get("/tweets")
   Last15Tweets(@Query("page") page: number){
-    return this.appService.Last15Tweets(page)
+    return this.appService.last15Tweets(page)
   }
 
   @Get("/tweets/:username")

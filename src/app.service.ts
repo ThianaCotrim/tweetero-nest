@@ -1,24 +1,24 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUser } from './DTOS/tweet';
-import { CreateTweet } from './DTOS/user';
+import { CreateUser } from './DTOS/user';
+import { CreateTweet } from './DTOS/tweet';
 
 @Injectable()
 export class AppService {
 
+  private tweets = []
   private users = []
-  private tweets = []  
 
   constructor (){
+    this.tweets= []
     this.users = []
-    this.tweets = []
   }
 
   getHello(): string {
-    return 'Hello World!';
+    return "I'm okay!"
   }
 
   getHealth(): string {
-    return "I'ts ok"
+    return "I'm okay!"
   }
 
   createUser (body: CreateUser){
@@ -31,11 +31,14 @@ export class AppService {
     if (!user) throw new HttpException("Not Authorized", HttpStatus.UNAUTHORIZED)
 
     const tweeet = {username, tweet, avatar: user.avatar}
+    console.log(this.tweets)
     this.tweets.push(tweeet)
   }
 
-  Last15Tweets (page: number){
-    if (page === undefined || page === null) page = 1
+  last15Tweets (page: number){
+    if (page === undefined || page === null) {
+      page = 1
+  }
 
     const pages = Number(page)
 

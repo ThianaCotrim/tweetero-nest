@@ -1,11 +1,14 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString} from "class-validator";
 
-export class CreateUser {
+export class CreateTweet {
     @IsString()
     @IsNotEmpty({ message: "Todos os campos são obrigatórios"})
     username: string
 
     @IsString()
     @IsNotEmpty({ message: "Todos os campos são obrigatórios"})
-    avatar: string
+    tweet: string
+
+    // @IsUrl()
+    // avatar: string
 }
