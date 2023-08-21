@@ -1,57 +1,51 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUser } from './DTOS/user';
-import { CreateTweet } from './DTOS/tweet';
+import { CreateUser } from './DTOS/user.dto';
+import { CreateTweet } from './DTOS/tweet.dto';
 
 @Injectable()
 export class AppService {
-
   private tweets = []
   private users = []
 
-  constructor (){
+  constructor(){
     this.tweets= []
     this.users = []
   }
 
-  getHello(): string {
-    return "I'm okay!"
-  }
-
   getHealth(): string {
-    return "I'm okay!"
+    return "I'm okay!";
   }
 
-  createUser (body: CreateUser){
+  createUser(body: CreateUser){
     this.users.push(body)
   }
 
-  createTweet (body: CreateTweet){
+  createTweet(body: CreateTweet){
     const {username, tweet} = body
-    const user = this.users.find((u) => u.username === username)
-    if (!user) throw new HttpException("Not Authorized", HttpStatus.UNAUTHORIZED)
+    const userfind = this.users.find((u) => u.username === username);
+    if (!userfind) throw new HttpException("Not Authorized", HttpStatus.UNAUTHORIZED)
 
-    const tweeet = {username, tweet, avatar: user.avatar}
-    console.log(this.tweets)
-    this.tweets.push(tweeet)
+    const tweetObj = {username, tweet, avatar: userfind.avatar}
+
+    this.tweets.push(tweetObj)
   }
 
-  last15Tweets (page: number){
+  last15Tweets(page: number){
     if (page === undefined || page === null) {
       page = 1
+    }
+    const pageNumber = Number(page)
+
+    if (pageNumber < 1) throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST)
+
+    const firstIndex = (pageNumber - 1) * 15
+    const lastIndex = firstIndex + 15
+    const allTweets = this.tweets.reverse()
+
+    return allTweets.slice(firstIndex, lastIndex)
   }
 
-    const pages = Number(page)
-
-    if(pages < 1 ) throw new HttpException("Bad Request", HttpStatus.BAD_REQUEST)
-
-    const first = (pages -1) * 15
-    const last = first + 15
-    const all = this.tweets.reverse()
-
-    return all.slice(first, last)
-  }
-
-  userTweet (username: string){
+  userTweet(username: string){
     return this.tweets.filter(tweets => tweets.username === username)
   }
 }
